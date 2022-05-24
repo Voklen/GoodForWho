@@ -61,10 +61,19 @@ class _ScannerScreenState extends State<ScannerScreen> {
 Route _createRoute(Barcode code) {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) =>
-        MyHomePage(title: code.value),
+        ResultPage(title: code.value),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      CameraController.instance.resumeDetector();
-      return child;
+      const begin = Offset(0.0, 1.0);
+      const end = Offset.zero;
+      const curve = Curves.ease;
+
+      final tween =
+          Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
     },
   );
 }
